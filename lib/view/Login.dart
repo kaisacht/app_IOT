@@ -1,7 +1,11 @@
+import 'package:first_app/api/APILoginAndSignUp.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   @override
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  BaseClient baseClient = BaseClient();
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -45,8 +49,22 @@ class LoginPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 40),
                   child: Column(
                     children: <Widget>[
-                      inputFile(label: "Email"),
-                      inputFile(label: "Password", obscureText: true)
+                      TextFormField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
                     ],
                   ),
                 ),
@@ -56,7 +74,7 @@ class LoginPage extends StatelessWidget {
                     padding: EdgeInsets.only(top: 3, left: 3),
                     decoration:
                     BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
+                         borderRadius: BorderRadius.circular(50),
                         border: Border(
                           bottom: BorderSide(color: Colors.black),
                           top: BorderSide(color: Colors.black),
@@ -71,7 +89,17 @@ class LoginPage extends StatelessWidget {
                     child: MaterialButton(
                       minWidth: double.infinity,
                       height: 60,
-                      onPressed: () {},
+                      onPressed: () async{
+                        String username = usernameController.text;
+                        String password = passwordController.text;
+                        int code = await baseClient.getCodeLogin(username, password);
+                        print(code);
+                        if(code == 200){
+                          print("Success");
+                        }else{
+                          print("Fail");
+                        }
+                      },
                       color: Color(0xff0095FF),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -107,10 +135,10 @@ class LoginPage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 100),
                   height: 200,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/background.png"),
-                        fit: BoxFit.fitHeight
-                    ),
+                    // image: DecorationImage(
+                    //     image: AssetImage("assets/background.png"),
+                    //     fit: BoxFit.fitHeight
+                    // ),
 
                   ),
                 )

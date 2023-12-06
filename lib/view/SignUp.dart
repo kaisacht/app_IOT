@@ -1,7 +1,15 @@
+import 'package:first_app/alert/AlertRegisterFail.dart';
+import 'package:first_app/alert/AlertRegisterSuccess.dart';
+import 'package:first_app/api/APILoginAndSignUp.dart';
+import 'package:first_app/view/Login.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatelessWidget {
   @override
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  BaseClient baseClient = BaseClient();
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -17,8 +25,6 @@ class SignupPage extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios,
             size: 20,
             color: Colors.black,),
-
-
         ),
       ),
       body: SingleChildScrollView(
@@ -42,18 +48,39 @@ class SignupPage extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 15,
                         color:Colors.grey[700]),)
-
-
+                  
                 ],
               ),
               Column(
                 children: <Widget>[
-                  inputFile(label: "Username"),
-                  inputFile(label: "Email"),
-                  inputFile(label: "Password", obscureText: true),
-                  inputFile(label: "Confirm Password ", obscureText: true),
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ],
               ),
+              
               Container(
                 padding: EdgeInsets.only(top: 3, left: 3),
                 decoration:
@@ -64,16 +91,30 @@ class SignupPage extends StatelessWidget {
                       top: BorderSide(color: Colors.black),
                       left: BorderSide(color: Colors.black),
                       right: BorderSide(color: Colors.black),
-
-
-
+                      
                     )
 
                 ),
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
-                  onPressed: () {},
+                  onPressed: () async {
+                    String name = usernameController.text;
+                    String password = passwordController.text;
+                    String confirmPassword = confirmPasswordController.text;
+                    if (password != confirmPassword) {
+                      print('Mat khau chua khop');
+                    } else {
+                      int code = await baseClient.getCodeRegister(name, password);
+                      if(code == 201){
+                        showAlertDialogRegisterSuccess(context);
+                      }
+                      else if(code == 400){
+                        showAlertDialogRegisterFail400(context);
+                      }
+                      print(code);
+                    }
+                  },
                   color: Color(0xff0095FF),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -105,9 +146,7 @@ class SignupPage extends StatelessWidget {
                   )
                 ],
               )
-
-
-
+              
             ],
 
           ),
@@ -159,5 +198,32 @@ Widget inputFile({label, obscureText = false})
       ),
       SizedBox(height: 10,)
     ],
+  );
+}
+showAlertDialog(BuildContext context) {
+
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thông báo"),
+    content: Text("Đăng ký thành công."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
   );
 }
