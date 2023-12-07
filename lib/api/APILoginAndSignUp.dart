@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:first_app/view/Login.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 const String baseUrl = 'http://localhost:8000/login';
 

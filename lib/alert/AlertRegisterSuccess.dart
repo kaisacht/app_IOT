@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../view/Login.dart';
@@ -6,7 +5,7 @@ import '../view/Login.dart';
 showAlertDialogRegisterSuccess(BuildContext context) {
   // set up the button
   Widget okButton = TextButton(
-    child: Text("OK"),
+    child: const Text("OK"),
     onPressed: () {
       Navigator.of(context).pop();
       Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
@@ -14,8 +13,8 @@ showAlertDialogRegisterSuccess(BuildContext context) {
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Thông báo"),
-    content: Text("Đăng ký thành công"),
+    title: const Text("Thông báo"),
+    content: const Text("Đăng ký thành công"),
     actions: [
       okButton,
     ],

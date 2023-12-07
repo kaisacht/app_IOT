@@ -1,17 +1,18 @@
-import 'dart:ui';
 
 import 'package:first_app/view/Login.dart';
 import 'package:first_app/view/SignUp.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: HomePage(),
   ));
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
 
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
           child: Column(
             // even space distribution
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     "Welcome",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -40,7 +41,7 @@ class HomePage extends StatelessWidget {
                     ),
 
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text("BackSlash Flutter provides extraordinary flutter tutorials. Do Subscribe! ",
@@ -54,7 +55,7 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/welcome.png")
                     )
@@ -73,12 +74,12 @@ class HomePage extends StatelessWidget {
                     },
                     // defining the shape
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(
+                        side: const BorderSide(
                             color: Colors.black
                         ),
                         borderRadius: BorderRadius.circular(50)
                     ),
-                    child: Text(
+                    child: const Text(
                       "Login",
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -87,7 +88,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   // creating the signup button
-                  SizedBox(height:20),
+                  const SizedBox(height:20),
                   MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
@@ -95,11 +96,11 @@ class HomePage extends StatelessWidget {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> SignupPage() ));
 
                     },
-                    color: Color(0xff0095FF),
+                    color: const Color(0xff0095FF),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)
                     ),
-                    child: Text(
+                    child: const Text(
                       "Sign up",
                       style: TextStyle(
                           color: Colors.white,
