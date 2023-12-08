@@ -1,6 +1,6 @@
 # first_app
 
-Project smart packing lot IOT.
+Project smart parking lot IOT.
 
 ## Getting Started
 
