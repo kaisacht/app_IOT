@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 const String baseUrl = 'http://localhost:8000/login';
 
-class BaseClient {
+class APILoginAndSignUp {
   var client = http.Client();
   Future<int> getCodeRegister(String name, String password) async {
     // Replace this URL with your endpoint

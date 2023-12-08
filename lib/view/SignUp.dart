@@ -5,11 +5,10 @@ import 'package:first_app/view/Login.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatelessWidget {
-  @override
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  final BaseClient baseClient = BaseClient();
+  final APILoginAndSignUp apiLoginAndSignUp = APILoginAndSignUp();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,14 +105,13 @@ class SignupPage extends StatelessWidget {
                     if (password != confirmPassword) {
                       print('Mat khau chua khop');
                     } else {
-                      int code = await baseClient.getCodeRegister(name, password);
+                      int code = await apiLoginAndSignUp.getCodeRegister(name, password);
                       if(code == 201){
                         showAlertDialogRegisterSuccess(context);
                       }
                       else if(code == 400){
                         showAlertDialogRegisterFail400(context);
                       }
-                      print(code);
                     }
                   },
                   color: const Color(0xff0095FF),
@@ -127,14 +125,9 @@ class SignupPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                     color: Colors.white,
-
                   ),
                   ),
-
                 ),
-
-
-
               ),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -159,72 +152,4 @@ class SignupPage extends StatelessWidget {
 
     );
   }
-}
-
-
-
-// we will be creating a widget for text field
-Widget inputFile({label, obscureText = false})
-{
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color:Colors.black87
-        ),
-
-      ),
-      const SizedBox(
-        height: 5,
-      ),
-      TextField(
-        obscureText: obscureText,
-        decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0,
-                horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  //color: Colors.grey[400]
-              ),
-
-            ),
-            border: OutlineInputBorder(
-                //borderSide: BorderSide(color: Colors.grey[400])
-            )
-        ),
-      ),
-      const SizedBox(height: 10,)
-    ],
-  );
-}
-showAlertDialog(BuildContext context) {
-
-  // set up the button
-  Widget okButton = TextButton(
-    child: const Text("OK"),
-    onPressed: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: const Text("Thông báo"),
-    content: const Text("Đăng ký thành công."),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

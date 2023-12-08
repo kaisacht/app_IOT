@@ -1,13 +1,12 @@
+import 'package:first_app/alert/AlertLoginFail.dart';
 import 'package:first_app/api/APILoginAndSignUp.dart';
 import 'package:first_app/view/HomeUser.dart';
-import 'package:first_app/view/SignUp.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final BaseClient baseClient = BaseClient();
-
+  final APILoginAndSignUp apiLoginAndSignUp = APILoginAndSignUp();
   LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
@@ -25,8 +24,6 @@ class LoginPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios,
             size: 20,
             color: Colors.black,),
-
-
         ),
       ),
       body: SizedBox(
@@ -40,10 +37,10 @@ class LoginPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    const Text("Login",
+                    const Text("Đăng nhập",
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                     const SizedBox(height: 20,),
-                    Text("Login to your account",
+                    Text("Đăng nhập với tài khoản của bạn",
                       style: TextStyle(
                           fontSize: 15,
                           color:Colors.grey[700]),)
@@ -56,7 +53,7 @@ class LoginPage extends StatelessWidget {
                       TextFormField(
                       controller: usernameController,
                       decoration: const InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Tên đăng nhập',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -65,7 +62,7 @@ class LoginPage extends StatelessWidget {
                       controller: passwordController,
                       obscureText: true,
                       decoration: const InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'Mật khẩu',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -84,11 +81,7 @@ class LoginPage extends StatelessWidget {
                           top: BorderSide(color: Colors.black),
                           left: BorderSide(color: Colors.black),
                           right: BorderSide(color: Colors.black),
-
                         )
-
-
-
                     ),
                     child: MaterialButton(
                       minWidth: double.infinity,
@@ -96,13 +89,12 @@ class LoginPage extends StatelessWidget {
                       onPressed: () async{
                         String username = usernameController.text;
                         String password = passwordController.text;
-                        int code = await baseClient.getCodeLogin(username, password);
-                        print(code);
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        int code = await apiLoginAndSignUp.getCodeLogin(username, password);
                         if(code == 200){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-                          print("Success");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                         }else{
-                          print("Fail");
+                          showAlertDialogLoginFail(context);
                         }
                       },
                       color: const Color(0xff0095FF),
@@ -112,7 +104,7 @@ class LoginPage extends StatelessWidget {
 
                       ),
                       child: const Text(
-                        "Login", style: TextStyle(
+                        "Đăng nhập", style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
                         color: Colors.white,
@@ -128,8 +120,8 @@ class LoginPage extends StatelessWidget {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Don't have an account?"),
-                    Text(" Sign up", style: TextStyle(
+                    Text("Bạn chưa có tài khoản?"),
+                    Text(" Đăng ký", style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),)
@@ -155,45 +147,4 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
-}
-
-
-// we will be creating a widget for text field
-Widget inputFile({label, obscureText = false})
-{
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        label,
-        style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color:Colors.black87
-        ),
-
-      ),
-      const SizedBox(
-        height: 5,
-      ),
-      TextField(
-        obscureText: obscureText,
-        decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0,
-                horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  //color: Colors.grey[400]
-              ),
-
-            ),
-            border: OutlineInputBorder(
-                //borderSide: BorderSide(color: Colors.grey[400])
-            )
-        ),
-      ),
-      const SizedBox(height: 10,)
-    ],
-  );
 }
