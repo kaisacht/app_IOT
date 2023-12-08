@@ -1,6 +1,6 @@
 # first_app
 
-A new Flutter project.
+Project smart packing lot IOT.
 
 ## Getting Started
 
