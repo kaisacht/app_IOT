@@ -1,10 +1,12 @@
 import 'package:first_app/alert/AlerCreateVehiclesFail.dart';
 import 'package:first_app/alert/AlertRegisterSuccess.dart';
 import 'package:first_app/api/APICreateVehicles.dart';
+import 'package:first_app/info/ReadFile.dart';
 import 'package:flutter/material.dart';
 
 class CreateVehiclesPage extends StatefulWidget {
   @override
+
   _CreateVehiclesPage createState() =>
       _CreateVehiclesPage();
 }
@@ -12,6 +14,7 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
   final TextEditingController licensePlateController = TextEditingController();
   final TextEditingController vehicleTypeController = TextEditingController();
   final APICreateVehicles apiCreateVehicles = APICreateVehicles();
+  final ReadFile readFile = ReadFile();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,12 +82,19 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
                       onPressed: () async {
                         String licensePlate = licensePlateController.text;
                         String vehicleType = vehicleTypeController.text;
-                        int code = await apiCreateVehicles.getCodeCreateVehicles(licensePlate, vehicleType);
-                        if(code == 201){
-                          showAlertDialogRegisterSuccess(context);
-                        }else {
-                          showAlertDialogCreateVehiclesFail(context);
+                        String? content = await readFile.readDataFromFile();
+                        if(content !=null){
+                          List<String> lines = content.split('\n');
+                          int startIndex = content.indexOf('Token: ') + 'Token: '.length;
+                          String token = content.substring(startIndex).trim();
+                          int code = await apiCreateVehicles.getCodeCreateVehicles(licensePlate, vehicleType,token);
+                          if(code == 201){
+                            showAlertDialogRegisterSuccess(context);
+                          }else {
+                            showAlertDialogCreateVehiclesFail(context);
+                          }
                         }
+
                       },
                       color: const Color(0xff0095FF),
                       elevation: 0,

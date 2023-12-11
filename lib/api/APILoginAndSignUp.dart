@@ -25,7 +25,7 @@ class APILoginAndSignUp {
     }
   }
 
-  Future<int> getCodeLogin(String name, String password) async {
+  Future<String?> getCodeLogin(String name, String password) async {
     // Replace this URL with your endpoint
     var url = Uri.parse("http://172.17.176.1:8000/login");
     // Replace these with your form data
@@ -40,9 +40,11 @@ class APILoginAndSignUp {
         //headers: {'Content-Type': 'application/json'}, // Set the content type
         body: formData, // Pass the JSON string as the body
       );
-      return response.statusCode;
+      Map<String, dynamic> jsonData = json.decode(response.body);
+      String accessToken = jsonData['access_token'];
+      return accessToken;
     } catch (error) {
-      return 0;
+      return null;
     }
   }
 }

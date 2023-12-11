@@ -1,7 +1,7 @@
 import 'package:first_app/alert/AlertRegisterFail.dart';
 import 'package:first_app/alert/AlertRegisterSuccess.dart';
 import 'package:first_app/api/APILoginAndSignUp.dart';
-import 'package:first_app/view/Login.dart';
+import 'package:first_app/loginandsignup/Login.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatelessWidget {

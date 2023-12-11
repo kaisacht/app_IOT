@@ -1,3 +1,6 @@
+import 'package:first_app/api/APIGetAllVehicle.dart';
+import 'package:first_app/info/ReadFile.dart';
+import 'package:first_app/view/GetAllVehicles.dart';
 import 'package:flutter/material.dart';
 
 import 'CreateVehicles.dart';
@@ -105,6 +108,14 @@ class _HomePageState extends State<HomePage> {
                           title: 'Xem lịch sử hoạt động',
                         ),
                         _cardMenu(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GetAllVehiclesPage(),
+                              ),
+                            );
+                          },
                           icon: 'assets/images/management.png',
                           title: 'Quản lý phương tiện',
                         ),

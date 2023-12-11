@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../view/Login.dart';
+import '../loginandsignup/Login.dart';
 
 showAlertDialogRegisterSuccess(BuildContext context) {
   // set up the button

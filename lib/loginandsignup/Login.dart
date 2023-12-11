@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'package:first_app/alert/AlertLoginFail.dart';
 import 'package:first_app/api/APILoginAndSignUp.dart';
 import 'package:first_app/view/HomeUser.dart';
@@ -90,9 +92,10 @@ class LoginPage extends StatelessWidget {
                         String username = usernameController.text;
                         String password = passwordController.text;
                         //Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                        int code = await apiLoginAndSignUp.getCodeLogin(username, password);
-                        if(code == 200){
+                        String? token = await apiLoginAndSignUp.getCodeLogin(username, password);
+                        if(token != null){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                          saveCredentialsToFile(username, password, token);
                         }else{
                           showAlertDialogLoginFail(context);
                         }
@@ -146,5 +149,18 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+  void saveCredentialsToFile(String username, String password, String token) async {
+    const String fileName = 'dataUser.txt';
+    final String content = 'Username: $username\nPassword: $password\nToken: $token\n';
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/$fileName');
+      await file.writeAsString(content);
+      //print('Đã lưu thông tin tài khoản vào file $fileName');
+    } catch (e) {
+      //print('Đã xảy ra lỗi khi lưu file: $e');
+    }
   }
 }
