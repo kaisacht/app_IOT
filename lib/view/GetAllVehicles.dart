@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:first_app/api/APIGetAllVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
+import 'package:first_app/main.dart';
+import 'package:first_app/view/CardItemsVehicles.dart';
+import 'package:first_app/view/HomeUser.dart';
 import 'package:flutter/material.dart';
 
 class GetAllVehiclesPage extends StatefulWidget {
+  const GetAllVehiclesPage({super.key});
+
   @override
 
   _GetAllVehiclesPage createState() =>
@@ -35,7 +40,7 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
         Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
 
         List<dynamic> itemsList = jsonDataMap['items'];
-        print(itemsList);
+        //print(itemsList);
         setState(() {
           items = itemsList;
         });// Đọc dữ liệu từ tập tin JSON
@@ -43,7 +48,7 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
       // Chuyển đổi chuỗi JSON thành danh sách đối tượng
 
     } catch (e) {
-      print('Đã xảy ra lỗi khi đọc tập tin JSON: $e');
+      //print('Đã xảy ra lỗi khi đọc tập tin JSON: $e');
     }
   }
 
@@ -57,7 +62,12 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+              // context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
           },
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -66,34 +76,35 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Danh sách các mục từ JSON:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Các loại phương tiện đã đăng ký',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
+          ),
+          Expanded(
+            child: ListView.builder(
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text('License Plate: ${items[index]['license_plate']}'),
-                  subtitle: Text('Vehicle Type: ${items[index]['vehicle_type']}'),
-                  // Hiển thị các trường dữ liệu tương ứng từ từng đối tượng trong danh sách
+                return CardItemVehicles(
+                  licensePlate: items[index]['license_plate'],
+                  vehicleType: items[index]['vehicle_type'],
+                  createTime: items[index]['created_at'],
+                  id: items[index]['id'],
                 );
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
 }

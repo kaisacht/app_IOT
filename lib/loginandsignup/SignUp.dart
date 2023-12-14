@@ -37,14 +37,14 @@ class SignupPage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  const Text("Sign up",
+                  const Text("Đăng ký",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
 
                     ),),
                   const SizedBox(height: 20,),
-                  Text("Create an account, It's free ",
+                  Text("Mở tài khoản mới miễn phí",
                     style: TextStyle(
                         fontSize: 15,
                         color:Colors.grey[700]),)
@@ -56,7 +56,7 @@ class SignupPage extends StatelessWidget {
                   TextFormField(
                     controller: usernameController,
                     decoration: const InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'Tên người dùng',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -65,7 +65,7 @@ class SignupPage extends StatelessWidget {
                     controller: passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(
-                      labelText: 'Password',
+                      labelText: 'Mật khẩu',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -74,7 +74,7 @@ class SignupPage extends StatelessWidget {
                     controller: confirmPasswordController,
                     obscureText: true,
                     decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                      labelText: 'Xác nhận mật khẩu',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -103,7 +103,49 @@ class SignupPage extends StatelessWidget {
                     String password = passwordController.text;
                     String confirmPassword = confirmPasswordController.text;
                     if (password != confirmPassword) {
-                      print('Mat khau chua khop');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Row(
+                              children: [
+                                Icon(
+                                  Icons.warning,
+                                  color: Colors.orange, // Màu sắc của biểu tượng cảnh báo
+                                ),
+                                SizedBox(width: 8), // Khoảng cách giữa biểu tượng và tiêu đề
+                                Text(
+                                  "Thông báo",
+                                  style: TextStyle(color: Colors.orange), // Màu sắc của tiêu đề
+                                ),
+                              ],
+                            ),
+                            content: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center, // Căn giữa dòng
+                              children: [
+                                Text(
+                                  "Mật khẩu không khớp.",
+                                  textAlign: TextAlign.center, // Căn giữa văn bản
+                                  style: TextStyle(color: Colors.black87), // Màu sắc của nội dung
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  "OK",
+                                  style: TextStyle(color: Colors.orange), // Màu sắc của nút "OK"
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     } else {
                       int code = await apiLoginAndSignUp.getCodeRegister(name, password);
                       if(code == 201){
@@ -121,7 +163,7 @@ class SignupPage extends StatelessWidget {
 
                   ),
                   child: const Text(
-                    "Sign up", style: TextStyle(
+                    "Đăng ký", style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
                     color: Colors.white,
@@ -132,24 +174,18 @@ class SignupPage extends StatelessWidget {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Already have an account?"),
-                  Text(" Login", style:TextStyle(
+                  Text("Bạn đã có tài khoản?"),
+                  Text(" Đăng nhập", style:TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18
                   ),
                   )
                 ],
               )
-              
             ],
-
           ),
-
-
         ),
-
       ),
-
     );
   }
 }

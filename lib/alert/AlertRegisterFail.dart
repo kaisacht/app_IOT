@@ -1,23 +1,45 @@
 import 'package:flutter/material.dart';
 
 showAlertDialogRegisterFail400(BuildContext context) {
-  // set up the button
+  // Set up the button
   Widget okButton = TextButton(
     child: const Text("OK"),
     onPressed: () {
       Navigator.of(context).pop();
     },
   );
-  // set up the AlertDialog
+
+  // Set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text("Thông báo"),
-    content: const Text("Tên đăng nhập đã tồn tại."),
+    title: const Row(
+      children: [
+        Icon(
+          Icons.error,
+          color: Colors.red, // Màu sắc của biểu tượng cảnh báo
+        ),
+        SizedBox(width: 8), // Khoảng cách giữa biểu tượng và tiêu đề
+        Text(
+          "Thông báo",
+          style: TextStyle(color: Colors.red), // Màu sắc của tiêu đề
+        ),
+      ],
+    ),
+    content: const Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Tên đăng nhập đã tồn tại.",
+          style: TextStyle(color: Colors.black87), // Màu sắc của nội dung
+        ),
+      ],
+    ),
     actions: [
       okButton,
     ],
   );
 
-  // show the dialog
+  // Show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {

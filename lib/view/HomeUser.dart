@@ -14,6 +14,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ReadFile readFile = ReadFile();
+  String userName = '';
+  @override
+  void initState() {
+    super.initState();
+    getName();
+  }
+  void getName() async {
+    String? name = await readFile.getNameUser();
+    if (name != null) {
+      setState(() {
+        userName = name;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,18 +40,18 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'HI JOHN',
-                    style: TextStyle(
+                    'Xin chào $userName',
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.indigo,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  RotatedBox(
+                  const RotatedBox(
                     quarterTurns: 135,
                     child: Icon(
                       Icons.bar_chart_rounded,
@@ -129,10 +144,14 @@ class _HomePageState extends State<HomePage> {
                           icon: 'assets/images/other.png',
                           title: 'Tính năng khác',
                         ),
-                        // _cardMenu(
-                        //   icon: 'assets/images/entertainment.png',
-                        //   title: 'Tính năng khác',
-                        // ),
+
+                        _cardMenu(
+                          onTap: (){
+
+                          },
+                          icon: 'assets/images/logout.png',
+                          title: 'Đăng xuất',
+                        ),
                       ],
                     ),
                   ],

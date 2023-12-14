@@ -1,4 +1,5 @@
 import 'package:first_app/alert/AlerCreateVehiclesFail.dart';
+import 'package:first_app/alert/AlerCreateVehiclesSuccess.dart';
 import 'package:first_app/alert/AlertRegisterSuccess.dart';
 import 'package:first_app/api/APICreateVehicles.dart';
 import 'package:first_app/info/ReadFile.dart';
@@ -62,7 +63,7 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: vehicleTypeController,
-                    obscureText: true,
+                    //obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Loại xe',
                       border: OutlineInputBorder(),
@@ -84,12 +85,13 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
                         String vehicleType = vehicleTypeController.text;
                         String? content = await readFile.readDataFromFile();
                         if(content !=null){
-                          List<String> lines = content.split('\n');
                           int startIndex = content.indexOf('Token: ') + 'Token: '.length;
                           String token = content.substring(startIndex).trim();
                           int code = await apiCreateVehicles.getCodeCreateVehicles(licensePlate, vehicleType,token);
                           if(code == 201){
-                            showAlertDialogRegisterSuccess(context);
+                            licensePlateController.text = '';
+                            vehicleTypeController.text = '';
+                            showAlertDialogCreateVehiclesSuccess(context);
                           }else {
                             showAlertDialogCreateVehiclesFail(context);
                           }
@@ -103,13 +105,23 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
 
                       ),
 
-                      child: const Text(
-                        "Xác nhận", style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.white,
-
-                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Xác nhận",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
 
                     ),
@@ -122,19 +134,30 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
                         licensePlateController.text = '';
                         vehicleTypeController.text = '';
                       },
-                      color: const Color(0xff0095FF),
+                      color: const Color.fromRGBO(64, 64, 64, 1.0),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
 
                       ),
 
-                      child: const Text(
-                        "Hủy", style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cancel,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Hủy",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
