@@ -1,6 +1,10 @@
 import 'package:first_app/api/APIGetAllVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
+import 'package:first_app/loginandsignup/Login.dart';
+import 'package:first_app/view/GelAllActivityLogs.dart';
 import 'package:first_app/view/GetAllVehicles.dart';
+import 'package:first_app/view/SeeAndReviewPackingLot.dart';
+import 'package:first_app/view/SeePackingLot.dart';
 import 'package:flutter/material.dart';
 
 import 'CreateVehicles.dart';
@@ -95,6 +99,14 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _cardMenu(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SeeParkingLotPage(),
+                              ),
+                            );
+                          },
                           icon: 'assets/images/view_detail.png',
                           title: 'Xem bãi đỗ xe',
                         ),
@@ -119,6 +131,14 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _cardMenu(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const GetAllActivityLogs(),
+                              ),
+                            );
+                          },
                           icon: 'assets/images/history_log.png',
                           title: 'Xem lịch sử hoạt động',
                         ),
@@ -141,17 +161,53 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _cardMenu(
-                          icon: 'assets/images/other.png',
-                          title: 'Tính năng khác',
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReviewParkingLotPage(),
+                              ),
+                            );
+                          },
+                          icon: 'assets/images/icon_review.png',
+                          title: 'Xem đánh giá',
                         ),
 
                         _cardMenu(
                           onTap: (){
-
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                              ),
+                            );
                           },
                           icon: 'assets/images/logout.png',
                           title: 'Đăng xuất',
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 28, width: 30,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _cardMenu(
+                          icon: 'assets/images/other.png',
+                          title: 'Tính năng khác',
+                        ),
+
+                        // _cardMenu(
+                        //   onTap: (){
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => LoginPage(),
+                        //       ),
+                        //     );
+                        //   },
+                        //   icon: 'assets/images/logout.png',
+                        //   title: 'Đăng xuất',
+                        // ),
                       ],
                     ),
                   ],

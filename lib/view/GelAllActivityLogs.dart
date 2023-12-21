@@ -1,24 +1,25 @@
 import 'dart:convert';
+import 'package:first_app/api/APIGetAllActivityLog.dart';
 import 'package:first_app/api/APIGetAllVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
 import 'package:first_app/view/CardItemsVehicles.dart';
+import 'package:first_app/view/CardLogsVehicles.dart';
 import 'package:first_app/view/HomeUser.dart';
 import 'package:flutter/material.dart';
 
-class GetAllVehiclesPage extends StatefulWidget {
-  const GetAllVehiclesPage({super.key});
+class GetAllActivityLogs extends StatefulWidget {
+  const GetAllActivityLogs({super.key});
 
   @override
 
-  _GetAllVehiclesPage createState() =>
-      _GetAllVehiclesPage();
+  _GetAllActivityLogs createState() =>
+      _GetAllActivityLogs();
 }
 
-class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
+class _GetAllActivityLogs extends State<GetAllActivityLogs>{
   final ReadFile readFile = ReadFile();
-  final APIGetAllVehicles apiGetAllVehicles = APIGetAllVehicles();
+  final APIGetAllActivityLog apiGetAllActivityLog = APIGetAllActivityLog();
   List<dynamic> items = []; // Danh sách các mục từ file JSON
-
   @override
   void initState() {
     super.initState();
@@ -33,23 +34,18 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
         int startIndex = content.indexOf('Token: ') + 'Token: '.length;
         String token = content.substring(startIndex).trim();
         // Đọc nội dung từ tập tin JSON
-        String? jsonData = await apiGetAllVehicles.getAllVehicles(token); // Đọc dữ liệu từ tập tin JSON
-
+        String? jsonData = await apiGetAllActivityLog.getAllActivityLog(token); // Đọc dữ liệu từ tập tin JSON
         Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
-
         List<dynamic> itemsList = jsonDataMap['items'];
-        //print(itemsList);
+        print(itemsList);
         setState(() {
           items = itemsList;
-        });// Đọc dữ liệu từ tập tin JSON
+        });
       }
-      // Chuyển đổi chuỗi JSON thành danh sách đối tượng
-
     } catch (e) {
       //print('Đã xảy ra lỗi khi đọc tập tin JSON: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +76,7 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              'Các loại phương tiện đã đăng ký',
+              'Hoạt động phương tiện của bạn',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -91,11 +87,10 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
             child: ListView.builder(
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
-                return CardItemVehicles(
+                return CardLogsVehicles(
                   licensePlate: items[index]['license_plate'],
-                  vehicleType: items[index]['vehicle_type'],
-                  createTime: items[index]['created_at'],
-                  id: items[index]['id'],
+                  timestamp: items[index]['timestamp'],
+                  activity_type: items[index]['activity_type'],
                 );
               },
             ),
@@ -104,5 +99,4 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
       ),
     );
   }
-
 }
