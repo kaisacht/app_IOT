@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:first_app/api/APIGetAllVehicle.dart';
+import 'package:first_app/api/APIVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
 import 'package:first_app/view/CardItemsVehicles.dart';
 import 'package:first_app/view/HomeUser.dart';
@@ -16,7 +16,7 @@ class GetAllVehiclesPage extends StatefulWidget {
 
 class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
   final ReadFile readFile = ReadFile();
-  final APIGetAllVehicles apiGetAllVehicles = APIGetAllVehicles();
+  final APIVehicles apiVehicles = APIVehicles();
   List<dynamic> items = []; // Danh sách các mục từ file JSON
 
   @override
@@ -29,16 +29,14 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
     try {
       String? content = await readFile.readDataFromFile();
       if(content !=null) {
-        List<String> lines = content.split('\n');
         int startIndex = content.indexOf('Token: ') + 'Token: '.length;
         String token = content.substring(startIndex).trim();
         // Đọc nội dung từ tập tin JSON
-        String? jsonData = await apiGetAllVehicles.getAllVehicles(token); // Đọc dữ liệu từ tập tin JSON
+        String? jsonData = await apiVehicles.getAllVehicles(token); // Đọc dữ liệu từ tập tin JSON
 
         Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
 
         List<dynamic> itemsList = jsonDataMap['items'];
-        //print(itemsList);
         setState(() {
           items = itemsList;
         });// Đọc dữ liệu từ tập tin JSON

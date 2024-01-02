@@ -87,16 +87,19 @@ class _CreateVehiclesPage extends State<CreateVehiclesPage> {
                         if(content !=null){
                           int startIndex = content.indexOf('Token: ') + 'Token: '.length;
                           String token = content.substring(startIndex).trim();
-                          int code = await apiCreateVehicles.getCodeCreateVehicles(licensePlate, vehicleType,token);
-                          if(code == 201){
-                            licensePlateController.text = '';
-                            vehicleTypeController.text = '';
-                            showAlertDialogCreateVehiclesSuccess(context);
-                          }else {
-                            showAlertDialogCreateVehiclesFail(context);
+                          if(licensePlate.isEmpty || vehicleType.isEmpty){
+                            showAlertDialogCreateVehiclesFailBecauseNull(context);
+                          }else{
+                            int code = await apiCreateVehicles.getCodeCreateVehicles(licensePlate, vehicleType,token);
+                            if(code == 201){
+                              licensePlateController.text = '';
+                              vehicleTypeController.text = '';
+                              showAlertDialogCreateVehiclesSuccess(context);
+                            }else {
+                              showAlertDialogCreateVehiclesFail(context);
+                            }
                           }
                         }
-
                       },
                       color: const Color(0xff0095FF),
                       elevation: 0,

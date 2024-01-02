@@ -50,4 +50,23 @@ class ReadFile {
       return null;
     }
   }
+
+  Future<String?> getToken() async {
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/dataUser.txt');
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        int startIndex = content.indexOf('Token: ') + 'Token: '.length;
+        String token = content.substring(startIndex).trim();
+        return token;
+      } else {
+        // Tệp tin không tồn tại
+        return null;
+      }
+    } catch (e) {
+      // Xử lý ngoại lệ khi đọc tệp tin gặp vấn đề
+      return null;
+    }
+  }
 }
