@@ -92,7 +92,6 @@ class _GetAllVehiclesPage extends State<GetAllVehiclesPage> {
                 return CardItemVehicles(
                   licensePlate: items[index]['license_plate'],
                   vehicleType: items[index]['vehicle_type'],
-                  createTime: items[index]['created_at'],
                   id: items[index]['id'],
                 );
               },

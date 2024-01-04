@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:first_app/api/APISparkingLots.dart';
 import 'package:first_app/api/APIVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +14,41 @@ class SeeParkingLotPage extends StatefulWidget {
 }
 
 class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
-
-  List<int> randomValues = List.generate(200, (index) => Random().nextInt(3));
+  final APISparkingLots apiParkingLots = APISparkingLots();
+  final ReadFile readFile = ReadFile();
+  List<dynamic> listStateParkingLot = [];
   String selectedVehicle = '';
   List<dynamic> vehicleNames = [];
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    loadItemsFromJson();
+  }
 
+  Future<void> loadItemsFromJson() async {
+    try {
+      String? content = await readFile.readDataFromFile();
+      if(content !=null) {
+        int startIndex = content.indexOf('Token: ') + 'Token: '.length;
+        String token = content.substring(startIndex).trim();
+        // Đọc nội dung từ tập tin JSON
+        String? jsonData = await apiParkingLots.getAllSparkingSpace(token, 'false', 'false', 1,50); // Đọc dữ liệu từ tập tin JSON
+
+        Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
+
+        List<dynamic> itemsList = jsonDataMap['items'];
+        setState(() {
+          listStateParkingLot = itemsList;
+          print(listStateParkingLot);
+        });// Đọc dữ liệu từ tập tin JSON
+      }
+      // Chuyển đổi chuỗi JSON thành danh sách đối tượng
+    } catch (e) {
+      //print('Đã xảy ra lỗi khi đọc tập tin JSON: $e');
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bản đồ bãi đỗ xe'),
@@ -57,14 +87,14 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                     ),delegate: SliverChildBuilderDelegate(
                         (BuildContext ctx, index) {
                           Color color;
-                          switch (randomValues[index]) {
-                            case 0:
-                              color = Colors.red;
-                              break;
-                            case 1:
+                          switch (listStateParkingLot[index]['state']) {
+                            case 'free':
                               color = Colors.green;
                               break;
-                            case 2:
+                            case 'booked':
+                              color = Colors.red;
+                              break;
+                            case 'none':
                               color = Colors.yellow;
                               break;
                             default:
@@ -77,7 +107,6 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                           String? token = await ReadFile().getToken();
                           vehicleNames = (await (APIVehicles().getVehicleName(token!)))!;
                           if (color == Colors.green) {
-                            print(vehicleNames);
                             selectedVehicle = vehicleNames.first;
                             showModalBottomSheet(
                               context: context,
@@ -156,7 +185,7 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                         },
                       );
                     },
-                    childCount: randomValues.length,
+                    childCount: listStateParkingLot.length,
                   ),
                   ),
                 ],

@@ -8,14 +8,12 @@ class CardItemVehicles extends StatelessWidget {
   final ReadFile readFile = ReadFile();
   final String licensePlate;
   final String vehicleType;
-  final String createTime;
   final int id;
 
    CardItemVehicles({
     Key? key,
     required this.licensePlate,
     required this.vehicleType,
-    required this.createTime,
     required this.id,
   }) : super(key: key);
 
@@ -39,11 +37,6 @@ class CardItemVehicles extends StatelessWidget {
                   const SizedBox(height: 8.0),
                   Text(
                     'Loại phương tiện: $vehicleType',
-                    style: const TextStyle(fontSize: 16.0),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'Thời gian tạo: ${createTime.toString()}',
                     style: const TextStyle(fontSize: 16.0),
                   ),
                 ],
