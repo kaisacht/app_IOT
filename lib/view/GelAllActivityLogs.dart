@@ -30,14 +30,12 @@ class _GetAllActivityLogs extends State<GetAllActivityLogs>{
     try {
       String? content = await readFile.readDataFromFile();
       if(content !=null) {
-        List<String> lines = content.split('\n');
         int startIndex = content.indexOf('Token: ') + 'Token: '.length;
         String token = content.substring(startIndex).trim();
         // Đọc nội dung từ tập tin JSON
         String? jsonData = await apiGetAllActivityLog.getAllActivityLog(token); // Đọc dữ liệu từ tập tin JSON
         Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
         List<dynamic> itemsList = jsonDataMap['items'];
-        print(itemsList);
         setState(() {
           items = itemsList;
         });
@@ -88,9 +86,10 @@ class _GetAllActivityLogs extends State<GetAllActivityLogs>{
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
                 return CardLogsVehicles(
-                  licensePlate: items[index]['license_plate'],
+                  licensePlate: items[index]['vehicle']['license_plate'],
                   timestamp: items[index]['timestamp'],
                   activity_type: items[index]['activity_type'],
+                  vehicle_type: items[index]['vehicle']['vehicle_type'],
                 );
               },
             ),

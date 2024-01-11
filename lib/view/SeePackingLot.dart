@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:first_app/alert/AlertReserveFail.dart';
+import 'package:first_app/alert/AlertReserveSuccess.dart';
 import 'package:first_app/api/APISparkingLots.dart';
 import 'package:first_app/api/APIVehicle.dart';
 import 'package:first_app/info/ReadFile.dart';
 import 'package:flutter/material.dart';
+
+import 'HomeUser.dart';
 
 class SeeParkingLotPage extends StatefulWidget {
   const SeeParkingLotPage({Key? key}) : super(key: key);
@@ -15,6 +19,7 @@ class SeeParkingLotPage extends StatefulWidget {
 
 class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
   final APISparkingLots apiParkingLots = APISparkingLots();
+  final APIVehicles apiVehicles = APIVehicles();
   final ReadFile readFile = ReadFile();
   List<dynamic> listStateParkingLot = [];
   String selectedVehicle = '';
@@ -31,15 +36,20 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
       if(content !=null) {
         int startIndex = content.indexOf('Token: ') + 'Token: '.length;
         String token = content.substring(startIndex).trim();
-        // Đọc nội dung từ tập tin JSON
-        String? jsonData = await apiParkingLots.getAllSparkingSpace(token, 'false', 'false', 1,50); // Đọc dữ liệu từ tập tin JSON
 
-        Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
-
-        List<dynamic> itemsList = jsonDataMap['items'];
+        List<dynamic> parkingSpacesList = [];
+        int page = 1;
+        while (true) {
+          String? jsonData = await apiParkingLots.getAllSparkingSpace(token, 'false', 'false', page, 100); // Đọc dữ liệu từ tập tin JSON
+          Map<String, dynamic> jsonDataMap = json.decode(jsonData!);
+          List<dynamic> itemsList = jsonDataMap['items'];
+          parkingSpacesList += itemsList;
+          if (page == jsonDataMap['pages']) break;
+          page++;
+        }
+        parkingSpacesList.sort((a, b) => a['id'].compareTo(b['id']));
         setState(() {
-          listStateParkingLot = itemsList;
-          print(listStateParkingLot);
+          listStateParkingLot = parkingSpacesList;
         });// Đọc dữ liệu từ tập tin JSON
       }
       // Chuyển đổi chuỗi JSON thành danh sách đối tượng
@@ -51,7 +61,23 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bản đồ bãi đỗ xe'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context,
+              // context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Stack(
         children: <Widget>[
@@ -91,10 +117,10 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                             case 'free':
                               color = Colors.green;
                               break;
-                            case 'booked':
+                            case 'occupied':
                               color = Colors.red;
                               break;
-                            case 'none':
+                            case 'reserved':
                               color = Colors.yellow;
                               break;
                             default:
@@ -145,8 +171,16 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                                             Container(
                                               width: 120, // Đặt độ rộng của nút
                                               child: ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
+                                                onPressed: () async {
+                                                  //call api
+                                                  int vehicleId = await apiVehicles.getIDVehicleByName(token, selectedVehicle);
+                                                  int value  = await apiParkingLots.postReserveSpace(listStateParkingLot[index]['id'], vehicleId!);
+
+                                                  if(value == 204) {
+                                                    showAlertDialogReserveSuccess(context);
+                                                  }else{
+                                                    showAlertDialogReserveFail(context);
+                                                  }
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: Colors.green, // Màu nền của nút "Xác nhận"
@@ -176,12 +210,12 @@ class _SeeParkingLotPageState extends State<SeeParkingLotPage> {
                               },
                             );
 
-                          } else if (color == Colors.green)
-                            print("app nhu lon");
-                          else
-                            print("app nhu dau buoi");
-                          // Xử lý khi người dùng nhấn vào vị trí đỗ xe
-                          // Ví dụ: Hiển thị chi tiết vị trí đỗ xe
+                          } //else if (color == Colors.green)
+                          //   //print("app nhu lon");
+                          // else
+                          //   //print("app nhu dau buoi");
+                          // // Xử lý khi người dùng nhấn vào vị trí đỗ xe
+                          // // Ví dụ: Hiển thị chi tiết vị trí đỗ xe
                         },
                       );
                     },
@@ -290,5 +324,6 @@ Widget _cardMenu({
     ),
   );
 }
+
 
 

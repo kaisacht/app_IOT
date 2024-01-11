@@ -9,12 +9,14 @@ class CardLogsVehicles extends StatelessWidget {
   final String licensePlate;
   final String timestamp;
   final String activity_type;
+  final String vehicle_type;
 
   CardLogsVehicles({
     Key? key,
     required this.licensePlate,
     required this.timestamp,
     required this.activity_type,
+    required this.vehicle_type,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,11 @@ class CardLogsVehicles extends StatelessWidget {
                   const SizedBox(height: 8.0),
                   Text(
                     'Thời gian: ${timestamp.toString()}',
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'Loại phương tiện: ${vehicle_type.toString()}',
                     style: const TextStyle(fontSize: 16.0),
                   ),
                 ],

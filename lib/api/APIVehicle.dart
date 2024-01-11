@@ -33,4 +33,19 @@ class APIVehicles {
       return null;
     }
   }
+
+  Future<dynamic> getIDVehicleByName(String token, String licensePlate) async {
+    var url = Uri.parse("http://172.17.176.1:8000/vehicles/?license_plate=$licensePlate");
+    try {
+      var response = await http.get(
+          url,
+          headers: {
+            'Authorization': 'Bearer $token',}
+      );
+      Map<String, dynamic> jsonDataMap = json.decode(response.body);
+      return jsonDataMap['items'][0]['id'];
+    } catch (error) {
+      return 0;
+    }
+  }
 }

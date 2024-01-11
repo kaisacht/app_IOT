@@ -95,8 +95,10 @@ class _ReviewParkingLotPageState extends State<ReviewParkingLotPage> {
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    items[index]['feedback'],
-                    style: TextStyle(color: Colors.grey[600]),
+                      items[index]['feedback'] ?? 'Không có đánh giá',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -160,7 +162,6 @@ class _ReviewParkingLotPageState extends State<ReviewParkingLotPage> {
                           child: ElevatedButton(
                             onPressed: () async {
                               String? token = await readFile.getToken();
-                              // Xử lý khi người dùng nhấn nút "Xác nhận"
                               apiRatingFeedbacks.postRatingFeedbacks(selectStar, textEditingController.text, '1', token!);
                               Navigator.push(
                                 context,
